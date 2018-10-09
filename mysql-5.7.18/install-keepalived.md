@@ -29,6 +29,7 @@ root> make install
 
 
 3. Create keepalived-state-listener
+```bash
 root> cat << EOF | tee /usr/local/bin/keepalived-state-listener
 #!/usr/bin/env python
 
@@ -122,7 +123,7 @@ root> chmod 755 /usr/local/bin/notify_state.sh
 ```
 
 5. Create keepalived.conf
-``bash
+```bash
 root> mkdir /etc/keepalived
 
 root> cat << EOF | tee /etc/keepalived/keepalived.conf
