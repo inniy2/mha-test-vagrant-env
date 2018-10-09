@@ -55,7 +55,7 @@ mysql_variables=
 	connect_timeout_server=3000
 # make sure to configure monitor username and password
 # https://github.com/sysown/proxysql/wiki/Global-variables#mysql-monitor_username-mysql-monitor_password
-	monitor_username="root_WR"
+	monitor_username="monitor"
 	monitor_password="bigS3cret!!"
 	monitor_history=600000
 	monitor_connect_interval=60000
@@ -241,8 +241,28 @@ EOF
 ```
 
 ```
-admin> LOAD MYSQL SERVERS FROM CONFIG
 
+admin> LOAD MYSQL SERVERS      FROM CONFIG;  --( Include mysql_replication_hostgroups )
+admin> LOAD MYSQL USERS        FROM CONFIG;
+admin> LOAD MYSQL QUERY RULES  FROM CONFIG;
+admin> LOAD MYSQL VARIABLES    FROM CONFIG;
+
+
+admin> LOAD MYSQL SERVERS      TO RUNTIME;
+admin> LOAD MYSQL USERS        TO RUNTIME;
+admin> LOAD MYSQL QUERY RULES  TO RUNTIME;
+admin> LOAD MYSQL VARIABLES    TO RUNTIME;
+
+admin> SAVE MYSQL SERVERS      TO DISK;
+admin> SAVE MYSQL USERS        TO DISK;
+admin> SAVE MYSQL QUERY RULES  TO DISK;
+admin> SAVE MYSQL VARIABLES    TO DISK;
+
+admin> SELECT * FROM monitor.mysql_server_read_only_log ORDER BY time_start_us DESC LIMIT 10;
+
+mysql -h192.168.33.12 -uroot_RW -pbigS3cret\!\! -P6033 -e'show variables like "%server_id%"'
+mysql -h192.168.33.12 -uroot_W  -pbigS3cret\!\! -P6033 -e'show variables like "%server_id%"'
+mysql -h192.168.33.12 -uroot_R  -pbigS3cret\!\! -P6033 -e'show variables like "%server_id%"'
 
 ```
 
@@ -251,8 +271,36 @@ admin> LOAD MYSQL SERVERS FROM CONFIG
 admin>
 admin>
 admin>
+```
 
 
+4. Keepalived (With MHA)  
+```bash
+root> systemctl start keepalived
+```
+
+
+5. Rest MHA  
+```bash
+root> rm -rf  /var/log/masterha/mha/*
+
+mha> cat << EOF | tee ~/mhag1.cnf
+[server default]
+manager_workdir=/var/log/masterha/mha
+manager_log=/var/log/masterha/mha.log
+ 
+[server1]
+hostname=192.168.33.21
+candidate_master=1
+[server2]
+hostname=192.168.33.22
+candidate_master=1
+[server3]
+hostname=192.168.33.23
+no_master=1
+EOF
+
+root> systemctl start mha-manager
 ```
 
 
