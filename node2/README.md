@@ -304,6 +304,20 @@ root> systemctl start mha-manager
 ```
 
 
+6. With sysbench 1.0.15  
+```bash
+# For multiplexing
+update mysql_query_rules set multiplex = 1; 
+
+load mysql query rules to runtime;
+
+# For preventing diconnection while the host is down  
+set mysql-connect_timeout_server_max = 3600000;   # ms
+set mysql-connect_timeout_server     =  120000;   # ms
+
+> load mysql variables to runtime;
+```
+
 
 
 
