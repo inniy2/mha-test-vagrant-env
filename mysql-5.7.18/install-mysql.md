@@ -29,10 +29,10 @@ root> yum install -y mysql-community-server-5.7.18
 ```bash
 root> mkdir /MYSQL && chown mysql:mysql /MYSQL
 
-mysql> mkdir -p /MYSQL/cloud101/{data,innodb,binlog,innodb-log,log,work}
-mysql> mkdir -p /MYSQL/cloud101/work/tmp
+mysql> mkdir -p /MYSQL/XXXXX/{data,innodb,binlog,innodb-log,log,work}
+mysql> mkdir -p /MYSQL/XXXXX/work/tmp
 mysql> mkdir -p ~/{sock,script}
-mysql> touch /MYSQL/cloud101/log/cloud101.err
+mysql> touch /MYSQL/XXXXX/log/XXXXX.err
 ```
 
 4. Set my.cnf and mysqld.service (On mysql nodes)  
@@ -53,11 +53,11 @@ Change following options in my.cnf: [See my.cnf](./my.cnf)
 root> vim /usr/lib/systemd/system/mysqld.service
 ```
 Add following options to mysqld:  
-> --pid-file=/usr/local/mysql/sock/cloud101.pid --log-error=/MYSQL/cloud101/log/cloud101.err  
+> --pid-file=/usr/local/mysql/sock/XXXXX.pid --log-error=/MYSQL/XXXXX/log/XXXXX.err  
 
 
 Change PIDFile:  
-> PIDFile=/usr/local/mysql/sock/cloud101.pid  
+> PIDFile=/usr/local/mysql/sock/XXXXX.pid  
 
 
 ```bash

@@ -2,7 +2,7 @@
 - - - -  
 1. Config
 ```bash
-root> rm -rf  /MYSQL/cloud101/data/auto.cnf
+root> rm -rf  /MYSQL/XXXXX/data/auto.cnf
 root> vim /etc/my.cnf
 
 server_id = 2
